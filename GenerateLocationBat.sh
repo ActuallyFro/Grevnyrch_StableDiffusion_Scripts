@@ -42,11 +42,20 @@ for i in `seq 1 $TotalToGenerate`; do
 
   artist=${artists[$((RANDOM % ${#artists[@]}))]}
 
-  CmdStr="$header$PreString $location at $currentTime, $feature$ExtraString, in the style of $artist$footer"
+  LocationStr="$PreString $location at $currentTime, $feature$ExtraString, in the style of $artist"
+  LocationStr=${LocationStr//_/ }
 
-  #replace all '_' with ' '
-  CmdStr=${CmdStr//_/ }
+  CmdStr="$header$LocationStr$footer"
+
+  # CmdStr=${CmdStr//_/ }
+  # CmdStr=${CmdStr//optimized txt2img/optimized_txt2img}
+  # CmdStr=${CmdStr//ddim steps/ddim_steps}
+  # CmdStr=${CmdStr//negative prompt/negative_prompt}
+  # CmdStr=${CmdStr//n samples/n_samples}
+  # CmdStr=${CmdStr//n iter/n_iter}
+  
   echo $CmdStr >> $BATFile
+
   # echo "[DEBUG] $CmdStr >> $BATFile"
 
 done
