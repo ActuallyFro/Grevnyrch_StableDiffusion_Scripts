@@ -13,6 +13,7 @@ IWidth=896
 SeedNum=$((1 + RANDOM % 1000000))
 
 GuidanceScale=6.13
+#Artists v1.0.0
 artists=(Nobuyoshi_Araki eve_arnold mika_asai Tom_Bagshaw Banksy Ernie_Barnes Paul_Barson Jody_Bergsma John_T._Biggers Ilse_Bing Elsa_Bleda Charlie_Bowater Noah_Bradley Aleski_Briclot David_Burdeny Saturno_Butto Mike_Campau Elizabeth_Catlett Yanjun_Cheng Nathan_Coley Bruce_Davidson Andre_de_Dienes Roy_DeCarava Lise_Deharme Gariele_Dell\'otto Mandy_Disher Walt_Disney Dima_Dmitiev Dave_Dorman Natalia_Drepina TJ_Drysdale Lori_Earley Micheal_Eastman Harold_Edgerton Jason_Edmiston Les_Edwards Piet_Hein_Eek Bob_Eggleton Oalafur_Eliasson)
 
 header="python optimizedSD/optimized_txt2img.py --seed $SeedNum --ddim_steps $StepsNum --scale $GuidanceScale --H $IHeight --W $IWidth --prompt \"fantasy RPG, "
