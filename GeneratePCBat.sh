@@ -10,7 +10,8 @@ StepsNum=42
 SeedNum=$((1 + RANDOM % 1000000))
 GuidanceScale=4.77
 
-IHeight=896
+# IHeight=896
+IHeight=768
 IWidth=512
 
 UsePLMSModel=""
@@ -49,7 +50,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 header="python optimizedSD/optimized_txt2img.py --seed $SeedNum --ddim_steps $StepsNum --scale $GuidanceScale --H $IHeight --W $IWidth --prompt \""
-footer=", anthropomorphic, ((full body)) portrait, fantasy RPG, hyperdetailed, hyperrealism, photorealism, intricate,8k, highly detailed, volumetric lighting, digital painting, intense, sharp focus,\" --n_iter 5 --negative_prompt \"(disfigured), (bad art), (extra limbs), blurry, boring, sketch, (close up), lacklustre, repetitive, cropped, body out of frame, ((deformed)), (cross-eyed), (closed eyes), (bad anatomy), ugly, ((poorly drawn face))\" --n_samples 1$UsePLMSModel"
+footer=", ((full body)) portrait, fantasy RPG, (hyperdetailed) intricate, 8k, intense, sharp focus, two arms, two legs\" --n_iter 5 --negative_prompt \"(disfigured), (bad art), (extra limbs), blurry, boring, sketch, (close up), lacklustre, repetitive, cropped, body out of frame, ((deformed)), (cross-eyed), (closed eyes), (bad anatomy), ugly, ((poorly drawn face))\" --n_samples 1$UsePLMSModel"
  
 #Artists v1.0.0
 artists=(Nobuyoshi_Araki eve_arnold mika_asai Tom_Bagshaw Banksy Ernie_Barnes Paul_Barson Jody_Bergsma John_T._Biggers Ilse_Bing Elsa_Bleda Charlie_Bowater Noah_Bradley Aleski_Briclot David_Burdeny Saturno_Butto Mike_Campau Elizabeth_Catlett Yanjun_Cheng Nathan_Coley Bruce_Davidson Andre_de_Dienes Roy_DeCarava Lise_Deharme Gariele_Dell\'otto Mandy_Disher Walt_Disney Dima_Dmitiev Dave_Dorman Natalia_Drepina TJ_Drysdale Lori_Earley Micheal_Eastman Harold_Edgerton Jason_Edmiston Les_Edwards Piet_Hein_Eek Bob_Eggleton Oalafur_Eliasson)
@@ -58,7 +59,7 @@ artists=(Nobuyoshi_Araki eve_arnold mika_asai Tom_Bagshaw Banksy Ernie_Barnes Pa
 descripts=(scared angry happy sad gorgeous ugly handsome beautiful)
 gend=(male female)
 classes=(barbarian bard druid fighter rogue warlock wizard)
-characters=(elf orc human human half-elf half-orc tiefling halfling half-dragon gnome rabbit half-demon)
+characters=(elf orc human human half-elf half-orc tiefling halfling anthropomorphic_dragon gnome anthropomorphic_rabbit anthropomorphic_demon)
 
 # #loop over charcs array
 # for charcter in ${characters[@]}; do
