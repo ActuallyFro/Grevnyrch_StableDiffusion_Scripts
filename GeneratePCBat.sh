@@ -50,53 +50,40 @@ while [[ $# -gt 0 ]]; do
 done
 
 header="python optimizedSD/optimized_txt2img.py --seed $SeedNum --ddim_steps $StepsNum --scale $GuidanceScale --H $IHeight --W $IWidth --prompt \""
-footer=", ((full body)) portrait, fantasy RPG, (hyperdetailed) intricate, 8k, intense, sharp focus, two arms, two legs\" --n_iter 5 --negative_prompt \"(disfigured), (bad art), (extra limbs), blurry, boring, sketch, (close up), lacklustre, repetitive, cropped, body out of frame, ((deformed)), (cross-eyed), (closed eyes), (bad anatomy), ugly, ((poorly drawn face))\" --n_samples 1$UsePLMSModel"
+footer=", ((full body)) portrait, fantasy RPG, (hyperdetailed) intricate, 8k, intense, sharp focus, two arms, two legs\" --n_iter 5 --negative_prompt \"(cartoon), ((anime)), cad, (disfigured), (bad art), (extra limbs), blurry, boring, sketch, (close up), lacklustre, repetitive, cropped, body out of frame, ((deformed)), (cross-eyed), (closed eyes), (bad anatomy), ugly, ((poorly drawn face))\" --n_samples 1$UsePLMSModel"
  
-#Artists v1.0.0
-artists=(Nobuyoshi_Araki eve_arnold mika_asai Tom_Bagshaw Banksy Ernie_Barnes Paul_Barson Jody_Bergsma John_T._Biggers Ilse_Bing Elsa_Bleda Charlie_Bowater Noah_Bradley Aleski_Briclot David_Burdeny Saturno_Butto Mike_Campau Elizabeth_Catlett Yanjun_Cheng Nathan_Coley Bruce_Davidson Andre_de_Dienes Roy_DeCarava Lise_Deharme Gariele_Dell\'otto Mandy_Disher Walt_Disney Dima_Dmitiev Dave_Dorman Natalia_Drepina TJ_Drysdale Lori_Earley Micheal_Eastman Harold_Edgerton Jason_Edmiston Les_Edwards Piet_Hein_Eek Bob_Eggleton Oalafur_Eliasson)
+#Artists v1.1.0
+artists=(eve_arnold mika_asai Tom_Bagshaw Banksy John_T._Biggers Elsa_Bleda Charlie_Bowater Aleski_Briclot David_Burdeny Saturno_Butto Mike_Campau Elizabeth_Catlett Nathan_Coley Andre_de_Dienes Roy_DeCarava Gariele_Dell\'otto Mandy_Disher Dave_Dorman Natalia_Drepina TJ_Drysdale Lori_Earley Micheal_Eastman Les_Edwards Bob_Eggleton)
 
+#Paul_Barson-oils, Nobuyoshi_Araki-anime, Yanjun_Cheng-oils, Piet_Hein_Eek-oils, Harold_Edgerton-anime, Bruce_Davidson-anime, Ernie_Barnes-cartoon, Walt_Disney-cartoon, Lise_Deharme-oils, Ilse_Bing-oils, Jody_Bergsma-oils, Jason_Edmiston-cartoon, Oalafur_Eliasson-oils, Noah_Bradley-oils, Dima_Dmitiev-oils
 
-descripts=(scared angry happy sad gorgeous ugly handsome beautiful)
-gend=(male female)
-classes=(barbarian bard druid fighter rogue warlock wizard)
-characters=(elf orc human human half-elf half-orc tiefling halfling anthropomorphic_dragon gnome anthropomorphic_rabbit anthropomorphic_demon)
+descripts=(Well-dressed Elegant Good-looking Pretty Handsome Beautiful Gorgeous Slim Bald Curvy Cute Dimples Skinny Overweight Chubby Ugly Muscled Bearded)
 
-# #loop over charcs array
-# for charcter in ${characters[@]}; do
-#   #loop over descriptions array
-#   for description in ${descripts[@]}; do
-#     for charclass in ${classes[@]}; do
-#       if [ $((RANDOM % 3)) -eq 0 ]; then
-#         if [ $((RANDOM % 2)) -eq 0 ]; then
-#           # echo "$header$description ${gend[0]} $charclass $charcter$footer" 
-#           echo "$header$description ${gend[0]} $charclass $charcter$footer" >> $BATFile
-#         else
-#           # echo "$header$description ${gend[1]} $charclass $charcter$footer" 
-#           echo "$header$description ${gend[1]} $charclass $charcter$footer" >> $BATFile
-#         fi
-#       fi
+moods=(scared angry happy sad smirking laughing crying surprised shocked disgusted sleeping poisioned drunk shocked amused lazy jealous reflective confused thoughtful flirty frustrated bored tired relaxed enraged excited giddy nervous gloomy hungry hyper guilty hangry carefree cantankerous grumpy mysterious naughty aloof callous cold confident)
 
-#       # # ALL
-#       # echo "$header$description ${gend[0]} $charclass $charcter$footer" 
-#       # echo "$header$description ${gend[1]} $charclass $charcter$footer" 
-#     done
-#   done
-# done
+gend=(male female androgynous)
 
+classes=(barbarian bard druid fighter rogue warlock wizard artificer)
+
+characters=(elf orc human human half-elf half-orc tiefling halfling anthropomorphic_lokharic_Draconic  gnome anthropomorphic_rabbit)
 
 for i in `seq 1 $TotalToGenerate`; do
-  randDescription=${descripts[$((RANDOM % ${#descripts[@]}))]}
   randGend=${gend[$((RANDOM % ${#gend[@]}))]}
   randClass=${classes[$((RANDOM % ${#classes[@]}))]}
+  randDescription=${descripts[$((RANDOM % ${#descripts[@]}))]}
+  randMood=${moods[$((RANDOM % ${#moods[@]}))]}
   randCharc=${characters[$((RANDOM % ${#characters[@]}))]}
 
 
   artist=${artists[$((RANDOM % ${#artists[@]}))]}
 
-  PCStr="$randDescription $randGend $randClass $randCharc, $artist"
+  PCStr="$artist, $randGend $randClass $randCharc $randDescription $randMood "
   PCStr=${PCStr//_/ }
 
   CmdStr="$header$PCStr$footer"
 
   echo "$CmdStr" >> $BATFile
 done
+
+
+
