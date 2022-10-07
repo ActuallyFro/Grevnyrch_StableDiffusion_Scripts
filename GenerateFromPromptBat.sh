@@ -18,13 +18,20 @@ IWidth=768
 areAllArtistsUsed=FALSE
 
 #Artists v1.1.1
-artists=(eve_arnold mika_asai Tom_Bagshaw Banksy John_T._Biggers Elsa_Bleda Charlie_Bowater Aleski_Briclot David_Burdeny Saturno_Butto Mike_Campau Elizabeth_Catlett Nathan_Coley Andre_de_Dienes Roy_DeCarava Gariele_Dell\'otto Mandy_Disher Dave_Dorman Natalia_Drepina TJ_Drysdale Lori_Earley Micheal_Eastman Les_Edwards Bob_Eggleton Greg_Rutkowski Andreas_Rocha Magali_Villeneuve Natalie_Shau Anna_Dittmann Pino_Daeni Huang_Guangjian Allyssa_Monks Luis_Royo Daniel_F_Gerhartz Thomas_Kinkade Zdzislaw_Beksinski Atul_Kasbekar Dayanita_Singh Arjun_Mark Gautam_Rajadhyaksha)
+# artists=(eve_arnold mika_asai Tom_Bagshaw Banksy John_T._Biggers Elsa_Bleda Charlie_Bowater Aleski_Briclot David_Burdeny Saturno_Butto Mike_Campau Elizabeth_Catlett Nathan_Coley Andre_de_Dienes Roy_DeCarava Gariele_Dell\'otto Mandy_Disher Dave_Dorman Natalia_Drepina TJ_Drysdale Lori_Earley Micheal_Eastman Les_Edwards Bob_Eggleton Greg_Rutkowski Andreas_Rocha Magali_Villeneuve Natalie_Shau Anna_Dittmann Pino_Daeni Huang_Guangjian Allyssa_Monks Luis_Royo Daniel_F_Gerhartz Thomas_Kinkade Zdzislaw_Beksinski Atul_Kasbekar Dayanita_Singh Arjun_Mark Gautam_Rajadhyaksha)
+artistsNeedConversions=false
+#40K Run:
+#artists=(Anna_Dittmann Atul_Kasbekar Greg_Rutkowski Huang_Guangjian Magali_Villeneuve Natalia_Drepina Tom_Bagshaw Natalie_Shau)
+
+#RPG - Landscapes
+#Saturno_Butto,Mike_Campau,TJ_Drysdal,Zdzislaw_Beksinski,Andre_de_Dienes,Luis_Royo
+
 #Paul_Barson-oils, Nobuyoshi_Araki-anime, Yanjun_Cheng-oils, Piet_Hein_Eek-oils, Harold_Edgerton-anime, Bruce_Davidson-anime, Ernie_Barnes-cartoon, Walt_Disney-cartoon, Lise_Deharme-oils, Ilse_Bing-oils, Jody_Bergsma-oils, Jason_Edmiston-cartoon, Oalafur_Eliasson-oils, Noah_Bradley-oils, Dima_Dmitiev-oils, Maxfield_Parrish-oils, Terry_Moore-Cartoon, John_William_Waterhouse-oils, William_Adolphe_Bouguereau-oils
 
 prompt="fantasy RPG a group of adventurers standing at a busy city portcullis gate"
-negative="(cartoon), ((anime)), cad, (disfigured), (bad art), (extra limbs), blurry, boring, sketch, (close up), lacklustre, repetitive, cropped, body out of frame, ((deformed)), (cross-eyed), (closed eyes), (bad anatomy), ugly, ((poorly drawn face)), child, baby"
+negative="((anime)), (bad art), (extra limbs), blurry, boring, sketch, (close up), lacklustre, repetitive, cropped, body out of frame, ((deformed)), (cross-eyed), (closed eyes), (bad anatomy), ugly, ((poorly drawn face)), child, baby"
 themes="(hyperdetailed) intricate, 8k, intense, sharp focus, hyperrealism, DLSR, Photograph"
-# ((full body)) portrait,, two arms, two legs, fantasy RPG,
+# ((full body)) portrait,, two arms, two legs, fantasy RPG, (disfigured), cad, cartoon
 isArtistPrecidence=FALSE
 
 while [[ $# -gt 0 ]]; do
@@ -32,7 +39,11 @@ while [[ $# -gt 0 ]]; do
 
   case $key in
     -a | --artists)
-      artists="$$2"
+      artists=""
+      artists="$2"
+      # artists=("$2")
+      echo "[DEBUG] Passed artists: $artists"
+      artistsNeedConversions=TRUE
       shift # past argument
       shift # past value
       ;;
@@ -128,20 +139,25 @@ while [[ $# -gt 0 ]]; do
   esac
 done
  
+# artistsNeedConversions == false
+if [ "$artistsNeedConversions" = false ] ; then
+  artists=(Saturno_Butto Mike_Campau TJ_Drysdal Zdzislaw_Beksinski Andre_de_Dienes Luis_Royo)
+else 
+  artists=(${artists//,/ })
+  # IFS=',' read -ra artists <<< "$artists"
+fi
+
+echo "[DEBUG] Loaded artists: ${artists[@]}"
 
 ## TODO for PC creator:
 # gend=(male female male female androgynous)
 # classes=(barbarian bard druid fighter rogue warlock wizard artificer)
 # characters=(elf orc human human half-elf half-orc tiefling halfling anthropomorphic_lokharic_Draconic  gnome anthropomorphic_rabbit)
-# ### BANNED COPILOT WORD(S) IN HERE: ----v
-# moods=(scared angry happy sad smirking laughing crying surprised shocked disgusted sleeping poisioned drunk shocked amused lazy jealous reflective confused thoughtful flirty frustrated bored tired relaxed enraged excited giddy nervous gloomy hungry hyper guilty hangry carefree cantankerous grumpy mysterious naughty aloof callous cold confident)
-# #PG-13 WORDS: 
-# descripts=(Well-dressed Elegant Good-looking Pretty Handsome Beautiful Gorgeous Slim Bald Dimples Skinny Chubby Ugly Bearded Cute Overweight Muscular Albino Chiaroscuro)
-# #PG-13 WORDS: Curvy
-# ### BANNED COPILOT WORD(S) IN HERE: -----^
+
 
 #used artist array
 UsedArtists=()
+
 
 for i in `seq 1 $TotalGenerateLoops`; do
   # randClass=${classes[$((RANDOM % ${#classes[@]}))]}
