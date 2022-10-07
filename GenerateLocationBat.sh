@@ -27,7 +27,7 @@ features_outdoors=(foggy rainy snowy blue-glow red-glow green-glow orange-glow y
 addins_outdoors=(people animals monsters crowd cityguard bandits guards necromancers wizards marauders priests thieves clergy)
 
 features_indoors=(empty busy crowded dimly_lit brightly_lit darkly_lit blue-glow red-glow green-glow orange-glow yellow-glow purple-glow smokey)
-addins_indoors=(people clerks workers crowd cityguard bandit adveturers)
+addins_indoors=(people clerks workers crowd cityguard bandit adventurers)
 
 for i in `seq 1 $TotalToGenerate`; do
   # echo "[DEBUG] Loop: $i / $TotalToGenerate]"
