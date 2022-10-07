@@ -110,6 +110,7 @@ while [[ $# -gt 0 ]]; do
       echo "  -n | --negative_prompt \"<negative>\"     Negative prompt to use."
       echo "  -s | --steps <steps>                    Number of steps to take. ($StepsNum)"
       echo "  -S | --seed <seed>                      Seed number. (Random)"
+      echo "  -t | --themes <themes>                  List of themes to use."
       echo ""
       echo "  -H | --Height <height>                  Height of the image. ($IHeight)"
       echo "  -W | --Width <width>                    Width of the image. ($IWidth)"
@@ -241,7 +242,13 @@ for i in `seq 1 $TotalGenerateLoops`; do
   if [[ $needRestoreSeed == "true" ]]; then
     SeedNum=$tempSeed
   fi
+
 done
 
 
+#Summary of Prompt/
+# cat Generate_FromPrompt_2022-10-07T17_33_34Z.bat | tr "\"" "\n" | tr "," "\n" | grep 40K | sort | uniq -c
+#      33 Mike Campau Warhammer 40K Battle
+#      42 Todd McFarlane Warhammer 40K Battle
+#      45 Walt Disney Warhammer 40K Battle
 
