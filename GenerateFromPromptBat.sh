@@ -15,24 +15,14 @@ iterations=4
 IHeight=512
 IWidth=768
 
+promptNeedsConversions=false
+negativePromptNeedsConversions=false
+
+artistsNeedConversions=false
+isArtistPrecidence=FALSE
 areAllArtistsUsed=FALSE
 
-#Artists v1.1.1
-# artists=(eve_arnold mika_asai Tom_Bagshaw Banksy John_T._Biggers Elsa_Bleda Charlie_Bowater Aleski_Briclot David_Burdeny Saturno_Butto Mike_Campau Elizabeth_Catlett Nathan_Coley Andre_de_Dienes Roy_DeCarava Gariele_Dell\'otto Mandy_Disher Dave_Dorman Natalia_Drepina TJ_Drysdale Lori_Earley Micheal_Eastman Les_Edwards Bob_Eggleton Greg_Rutkowski Andreas_Rocha Magali_Villeneuve Natalie_Shau Anna_Dittmann Pino_Daeni Huang_Guangjian Allyssa_Monks Luis_Royo Daniel_F_Gerhartz Thomas_Kinkade Zdzislaw_Beksinski Atul_Kasbekar Dayanita_Singh Arjun_Mark Gautam_Rajadhyaksha)
-artistsNeedConversions=false
-#40K Run:
-#artists=(Anna_Dittmann Atul_Kasbekar Greg_Rutkowski Huang_Guangjian Magali_Villeneuve Natalia_Drepina Tom_Bagshaw Natalie_Shau)
-
-#RPG - Landscapes
-#Saturno_Butto,Mike_Campau,TJ_Drysdal,Zdzislaw_Beksinski,Andre_de_Dienes,Luis_Royo
-
-#Paul_Barson-oils, Nobuyoshi_Araki-anime, Yanjun_Cheng-oils, Piet_Hein_Eek-oils, Harold_Edgerton-anime, Bruce_Davidson-anime, Ernie_Barnes-cartoon, Walt_Disney-cartoon, Lise_Deharme-oils, Ilse_Bing-oils, Jody_Bergsma-oils, Jason_Edmiston-cartoon, Oalafur_Eliasson-oils, Noah_Bradley-oils, Dima_Dmitiev-oils, Maxfield_Parrish-oils, Terry_Moore-Cartoon, John_William_Waterhouse-oils, William_Adolphe_Bouguereau-oils
-
-prompt="fantasy RPG a group of adventurers standing at a busy city portcullis gate"
-negative="((anime)), (bad art), (extra limbs), blurry, boring, sketch, (close up), lacklustre, repetitive, cropped, body out of frame, ((deformed)), (cross-eyed), (closed eyes), (bad anatomy), ugly, ((poorly drawn face)), child, baby"
-themes="(hyperdetailed) intricate, 8k, intense, sharp focus, hyperrealism, DLSR, Photograph"
-# ((full body)) portrait,, two arms, two legs, fantasy RPG, (disfigured), cad, cartoon
-isArtistPrecidence=FALSE
+themesNeedConversions=false
 
 while [[ $# -gt 0 ]]; do
   key="$1"
@@ -67,18 +57,21 @@ while [[ $# -gt 0 ]]; do
 
     -p|--prompt)
       prompt="$2"
+      promptNeedsConversions=TRUE
       shift # past argument
       shift # past value
       ;;
 
     -n|--negative_prompt)
-      prompt="$2"
+      negative="$2"
+      negativePromptNeedsConversions=TRUE
       shift # past argument
       shift # past value
       ;;
 
     -t|--themes)
-      moods="$2"
+      themes="$2"
+      themesNeedConversions=TRUE
       shift # past argument
       shift # past value
       ;;
@@ -139,15 +132,43 @@ while [[ $# -gt 0 ]]; do
   esac
 done
  
-# artistsNeedConversions == false
+
 if [ "$artistsNeedConversions" = false ] ; then
+  #Artists v1.1.1
+  # artists=(eve_arnold mika_asai Tom_Bagshaw Banksy John_T._Biggers Elsa_Bleda Charlie_Bowater Aleski_Briclot David_Burdeny Saturno_Butto Mike_Campau Elizabeth_Catlett Nathan_Coley Andre_de_Dienes Roy_DeCarava Gariele_Dell\'otto Mandy_Disher Dave_Dorman Natalia_Drepina TJ_Drysdale Lori_Earley Micheal_Eastman Les_Edwards Bob_Eggleton Greg_Rutkowski Andreas_Rocha Magali_Villeneuve Natalie_Shau Anna_Dittmann Pino_Daeni Huang_Guangjian Allyssa_Monks Luis_Royo Daniel_F_Gerhartz Thomas_Kinkade Zdzislaw_Beksinski Atul_Kasbekar Dayanita_Singh Arjun_Mark Gautam_Rajadhyaksha)
+
+  #Artist Notes:
+  #Paul_Barson-oils, Nobuyoshi_Araki-anime, Yanjun_Cheng-oils, Piet_Hein_Eek-oils, Harold_Edgerton-anime, Bruce_Davidson-anime, Ernie_Barnes-cartoon, Walt_Disney-cartoon, Lise_Deharme-oils, Ilse_Bing-oils, Jody_Bergsma-oils, Jason_Edmiston-cartoon, Oalafur_Eliasson-oils, Noah_Bradley-oils, Dima_Dmitiev-oils, Maxfield_Parrish-oils, Terry_Moore-Cartoon, John_William_Waterhouse-oils, William_Adolphe_Bouguereau-oils
   artists=(Saturno_Butto Mike_Campau TJ_Drysdal Zdzislaw_Beksinski Andre_de_Dienes Luis_Royo)
 else 
   artists=(${artists//,/ })
-  # IFS=',' read -ra artists <<< "$artists"
 fi
 
-echo "[DEBUG] Loaded artists: ${artists[@]}"
+if [[ "$promptNeedsConversions" = "false" ]] ; then
+    echo "[WARNING] No prompt given. Using default."
+  prompt="fantasy RPG a group of adventurers standing at a busy city portcullis gate"
+fi
+
+if [[ "$negativePromptNeedsConversions" = "false" ]] ; then
+  echo "[WARNING] No negative prompt given. Using default."
+  negative="((anime)), (bad art), (extra limbs), blurry, boring, sketch, (close up), lacklustre, repetitive, cropped, body out of frame, ((deformed)), (cross-eyed), (closed eyes), (bad anatomy), ugly, ((poorly drawn face)), child, baby"
+fi
+
+if [[ "$themesNeedConversions" = "false" ]] ; then
+  echo "[WARNING] No themes given. Using default."
+  themes="(hyperdetailed) intricate, 8k, intense, sharp focus, hyperrealism, DLSR, Photograph"
+fi
+
+echo "===================="
+echo "[NOTICE] Prompt: \"$prompt\""
+echo ""
+echo "[NOTICE] Negative Prompt: \"$negative\""
+echo ""
+echo "[NOTICE] Artists: ${artists[@]}"
+echo ""
+echo "[NOTICE] Themes: $themes"
+echo "===================="
+
 
 ## TODO for PC creator:
 # gend=(male female male female androgynous)
