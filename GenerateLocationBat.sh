@@ -24,7 +24,7 @@ footer=", hyperdetailed, photorealism\" --n_iter 5 --negative_prompt \"cartoon, 
 locations=(City_Street back_alley city_sewers bazaar city_overlook city_square tavern tailor blacksmith inn guildhall gemcutter Alchemist_Shop Bookstore Leather_Worker_Shop General_Store Apothecary_Shop)
 timeOfDay=(morning mid-day night afternoon twilight high-noon sunset dawn)
 features_outdoors=(foggy rainy snowy blue-glow red-glow green-glow orange-glow yellow-glow purple-glow clear hdr cloudy_skies clear_skies stormy_skies thunderstorm aurora_borealis stars)
-addins_outdoors=(people animals monsters crowd cityguard bandits guards necromancers wizards marauders priests thieves clergy)
+addins_outdoors=(people animals monsters crowd city-guard bandits guards necromancers wizards marauders priests thieves clergy)
 
 features_indoors=(empty busy crowded dimly_lit brightly_lit darkly_lit blue-glow red-glow green-glow orange-glow yellow-glow purple-glow smokey)
 addins_indoors=(people clerks workers crowd cityguard bandit adventurers)
