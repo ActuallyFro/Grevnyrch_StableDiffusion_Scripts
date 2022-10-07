@@ -228,10 +228,10 @@ for i in `seq 1 $TotalGenerateLoops`; do
   FromPromptStr=""
   if [ $isArtistPrecidence = FALSE ]; then
     # FromPromptStr="$randClass $randCharc $randGend $artist $randMood $randDescription"
-    FromPromptStr="$prompt, by $artist"
+    FromPromptStr="$prompt, created by $artist"
   else
     # FromPromptStr="$artist $randClass $randCharc $randGend $randMood $randDescription"
-    FromPromptStr="$artist $prompt"
+    FromPromptStr="Created by $artist, $prompt"
   fi
   FromPromptStr=${FromPromptStr//_/ }
 
@@ -245,10 +245,9 @@ for i in `seq 1 $TotalGenerateLoops`; do
 
 done
 
-
-#Summary of Prompt/
-# cat Generate_FromPrompt_2022-10-07T17_33_34Z.bat | tr "\"" "\n" | tr "," "\n" | grep 40K | sort | uniq -c
-#      33 Mike Campau Warhammer 40K Battle
-#      42 Todd McFarlane Warhammer 40K Battle
-#      45 Walt Disney Warhammer 40K Battle
-
+#Summary of Prompt by Artist
+for i in "${artists[@]}"; do
+  tempArtistName=${i//_/ }
+  count=$(cat $BATFile | grep "$tempArtistName" | wc -l)
+  echo "$i: $count"
+done
