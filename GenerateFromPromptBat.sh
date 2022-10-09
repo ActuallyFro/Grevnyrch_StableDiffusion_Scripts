@@ -21,8 +21,13 @@ negativePromptNeedsConversions=false
 artistsNeedConversions=false
 isArtistPrecidence=FALSE
 areAllArtistsUsed=FALSE
+useCUDAModel=FALSE
 
 themesNeedConversions=false
+
+scriptPath="optimizedSD/optimized_txt2img.py"
+# antasy RPG, Dark Elf buying garments from anthomorphic rabbit shop-keeper, in Clothes Shop Tailor, in front of Mirrors and Manequins
+
 
 while [[ $# -gt 0 ]]; do
   key="$1"
@@ -42,7 +47,12 @@ while [[ $# -gt 0 ]]; do
       isArtistPrecidence=TRUE
       shift # past argument
       ;;
-
+      
+    -C | --use-cuda)
+      useCUDAModel=TRUE
+      shift # past argument
+      ;;
+      
     -g|--guidance|--scale)
       GuidanceScale="$2"
       shift # past argument
@@ -104,6 +114,7 @@ while [[ $# -gt 0 ]]; do
       echo "GenerateFromPromptBat.sh [options]"
       echo "  -a | --artists <artists>                List of artists to use"
       echo "  -A | --artistPrecidence                 Use artist precidence before prompt ($isArtistPrecidence)"
+      echo "  -C | --use-cuda                         Use CUDA model ($useCUDAModel)"
       echo "  -g | --guidance|--scale <scale>         Guidance scale. ($GuidanceScale)"
       echo "  -i | --iterations <iterations>          Number of iterations. ($iterations)"
       echo "  -p | --prompt \"<prompt>\"                Prompt to use. "
@@ -158,6 +169,17 @@ fi
 if [[ "$themesNeedConversions" = "false" ]] ; then
   echo "[WARNING] No themes given. Using default."
   themes="(hyperdetailed) intricate, 8k, intense, sharp focus, hyperrealism, DLSR, Photograph"
+fi
+
+if [[ $useCUDAModel = "TRUE" ]] ; then
+  echo "[WARNING] Using CUDA model. This may explode based on settings...ASSUMING VRAM is good..."
+  scriptPath="scripts/txt2img.py"
+  #Interesting Co-pilot artifact
+  #   echo "[INFO] Using CUDA model."
+  #   model="cudnn"
+  # else
+  #   echo "[INFO] Using CPU model."
+  #   model="cpu"
 fi
 
 echo "===================="
@@ -221,7 +243,7 @@ for i in `seq 1 $TotalGenerateLoops`; do
 
 
 
-  header="python optimizedSD/optimized_txt2img.py --seed $SeedNum --ddim_steps $StepsNum --scale $GuidanceScale --H $IHeight --W $IWidth --prompt \""
+  header="python $scriptPath --seed $SeedNum --ddim_steps $StepsNum --scale $GuidanceScale --H $IHeight --W $IWidth --prompt \""
   footer=", $themes\" --n_iter $iterations --negative_prompt \"$negative\" --n_samples 1"
 
 
@@ -246,8 +268,15 @@ for i in `seq 1 $TotalGenerateLoops`; do
 done
 
 #Summary of Prompt by Artist
+echo "=-----------------------="
+echo "Summary of Prompt by Artist:"
+echo ""
 for i in "${artists[@]}"; do
   tempArtistName=${i//_/ }
   count=$(cat $BATFile | grep "$tempArtistName" | wc -l)
   echo "$i: $count"
 done
+echo "=-----------------------="
+
+echo ""
+echo "[FIN] see $BATFile for commands"
