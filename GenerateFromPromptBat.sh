@@ -28,7 +28,6 @@ themesNeedConversions=false
 scriptPath="optimizedSD/optimized_txt2img.py"
 # antasy RPG, Dark Elf buying garments from anthomorphic rabbit shop-keeper, in Clothes Shop Tailor, in front of Mirrors and Manequins
 
-
 while [[ $# -gt 0 ]]; do
   key="$1"
 
