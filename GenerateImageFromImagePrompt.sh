@@ -209,15 +209,15 @@ for i in `seq 1 $TotalGenerateLoops`; do
   header="python $scriptPath --seed $SeedNum --ddim_steps $StepsNum --scale $GuidanceScale --prompt \""
   footer=", $themes\" --n_iter $iterations --negative_prompt \"$negative\" --n_samples 1  --strength $Strength --init-img $imgFile"
 
-  FromPromptStr=""
+  ImgPromptStr=""
   if [ $isArtistPrecidence = FALSE ]; then
-    FromPromptStr="$prompt, created by $artist"
+    ImgPromptStr="$prompt, created by $artist"
   else
-    FromPromptStr="Created by $artist, $prompt"
+    ImgPromptStr="Created by $artist, $prompt"
   fi
-  FromPromptStr=${FromPromptStr//_/ }
+  ImgPromptStr=${ImgPromptStr//_/ }
 
-  CmdStr="$header$FromPromptStr$footer"
+  CmdStr="$header$ImgPromptStr$footer"
 
   echo "$CmdStr" >> $BATFile
 
