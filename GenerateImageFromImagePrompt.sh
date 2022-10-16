@@ -16,7 +16,7 @@ BATFile="Generate_IMG_$DATE.bat"
 TotalGenerateLoops=120
 # StepsNum=50
 StepsNum=42
-SeedNum=$((1 + RANDOM % 1000000))
+# SeedNum=$((1 + RANDOM % 1000000))
 GuidanceScale=25.0
 iterations=4
 Strength=0.5
@@ -30,6 +30,7 @@ areAllArtistsUsed=FALSE
 # useCUDAModel=FALSE
 themesNeedConversions=false
 imageFileNeedsConversions=false
+isSeedRandom=FALSE
 
 scriptPath="optimizedSD/optimized_img2img.py"
 
@@ -98,6 +99,12 @@ while [[ $# -gt 0 ]]; do
       shift # past value
       ;;
 
+    -R | --random)
+      SeedNum=$((1 + RANDOM % 1000000))
+      isSeedRandom=TRUE
+      shift # past argument
+      ;;
+
     -s|--steps)
       StepsNum="$2"
       shift # past argument
@@ -120,6 +127,7 @@ while [[ $# -gt 0 ]]; do
       echo "  -I | --image <image>                    Image file to use."
       echo "  -p | --prompt \"<prompt>\"                Prompt to use. "
       echo "  -n | --negative_prompt \"<negative>\"     Negative prompt to use."
+      echo "  -R | --random                           Randomize the seed."
       echo "  -s | --steps <steps>                    Number of steps to take. ($StepsNum)"
       echo "  -S | --seed <seed>                      Seed number. (Random)"
       echo "  -t | --themes <themes>                  List of themes to use."
@@ -206,6 +214,12 @@ for i in `seq 1 $TotalGenerateLoops`; do
   else 
     UsedArtists+=($artist)
   fi
+
+  if [ "$isSeedRandom" = TRUE ] ; then
+    SeedNum=$((1 + RANDOM % 1000000)) 
+    echo "[NOTICE] Randomizing seed."
+  fi
+
 
   header="python $scriptPath --seed $SeedNum --ddim_steps $StepsNum --scale $GuidanceScale --prompt \""
   footer=", $themes\" --n_iter $iterations --negative_prompt \"$negative\" --n_samples 1  --strength $Strength --init-img $imgFile"

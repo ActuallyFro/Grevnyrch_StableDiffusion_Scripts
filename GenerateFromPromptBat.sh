@@ -24,6 +24,7 @@ areAllArtistsUsed=FALSE
 useCUDAModel=FALSE
 
 themesNeedConversions=false
+isSeedRandom=FALSE
 
 scriptPath="optimizedSD/optimized_txt2img.py"
 # antasy RPG, Dark Elf buying garments from anthomorphic rabbit shop-keeper, in Clothes Shop Tailor, in front of Mirrors and Manequins
@@ -83,6 +84,12 @@ while [[ $# -gt 0 ]]; do
       themesNeedConversions=TRUE
       shift # past argument
       shift # past value
+      ;;
+
+    -R | --random)
+      SeedNum=$((1 + RANDOM % 1000000))
+      isSeedRandom=TRUE
+      shift # past argument
       ;;
 
     -s|--steps)
@@ -240,7 +247,10 @@ for i in `seq 1 $TotalGenerateLoops`; do
     UsedArtists+=($artist)
   fi
 
-
+  if [ "$isSeedRandom" = TRUE ] ; then
+    SeedNum=$((1 + RANDOM % 1000000)) 
+    echo "[NOTICE] Randomizing seed."
+  fi
 
   header="python $scriptPath --seed $SeedNum --ddim_steps $StepsNum --scale $GuidanceScale --H $IHeight --W $IWidth --prompt \""
   footer=", $themes\" --n_iter $iterations --negative_prompt \"$negative\" --n_samples 1"
