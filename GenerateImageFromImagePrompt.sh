@@ -157,7 +157,8 @@ fi
 
 if [[ "$negativePromptNeedsConversions" = "false" ]] ; then
   echo "[WARNING] No negative prompt given. Using default."
-  negative="((anime)), (bad art), (extra limbs), blurry, boring, sketch, (close up), lacklustre, repetitive, cropped, body out of frame, ((deformed)), (cross-eyed), (closed eyes), (bad anatomy), ugly, ((poorly drawn face)), child, baby"
+  # negative="((anime)), (bad art), (extra limbs), blurry, boring, sketch, (close up), lacklustre, repetitive, cropped, body out of frame, ((deformed)), (cross-eyed), (closed eyes), (bad anatomy), ugly, ((poorly drawn face)), child, baby"
+  negative="((anime)), (bad art), ((cartoon)), blurry, boring, sketch, lackluster"
 fi
 
 if [[ "$themesNeedConversions" = "false" ]] ; then
