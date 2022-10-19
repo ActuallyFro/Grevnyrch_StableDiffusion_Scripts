@@ -8,6 +8,7 @@ GuidanceScale=4.77
 iterations=4
 Strength=0.5
 batchSize=3
+SeedNum=$((RANDOM % 100000))
 
 promptNeedsConversions=false
 negativePromptNeedsConversions=false
@@ -230,7 +231,7 @@ for i in `seq 1 $TotalGenerateLoops`; do
   if [ $isArtistPrecidence = FALSE ]; then
     PCStr="$randClass $randCharc $randGend, created by $artist $randMood $randDescription"
   else
-    PCStr="$Created by $artist, $randClass $randCharc $randGend $randMood $randDescription"
+    PCStr="Created by $artist, $randClass $randCharc $randGend $randMood $randDescription"
   fi
   PCStr=${PCStr//_/ }
 
