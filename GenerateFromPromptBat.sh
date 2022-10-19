@@ -10,6 +10,7 @@ StepsNum=42
 SeedNum=$((1 + RANDOM % 1000000))
 GuidanceScale=4.77
 iterations=4
+batchSize=2
 
 # IHeight=896
 IHeight=512
@@ -47,7 +48,12 @@ while [[ $# -gt 0 ]]; do
       isArtistPrecidence=TRUE
       shift # past argument
       ;;
-      
+    -b | --batchSize)
+      batchSize="$2"
+      shift # past argument
+      shift # past value
+      ;;
+
     -C | --use-cuda)
       useCUDAModel=TRUE
       shift # past argument
@@ -120,6 +126,7 @@ while [[ $# -gt 0 ]]; do
       echo "GenerateFromPromptBat.sh [options]"
       echo "  -a | --artists <artists>                List of artists to use"
       echo "  -A | --artistPrecidence                 Use artist precidence before prompt ($isArtistPrecidence)"
+      echo "  -b | --batchSize <batchSize>            Batch size for generation ($batchSize)"
       echo "  -C | --use-cuda                         Use CUDA model ($useCUDAModel)"
       echo "  -g | --guidance|--scale <scale>         Guidance scale. ($GuidanceScale)"
       echo "  -i | --iterations <iterations>          Number of iterations. ($iterations)"
@@ -249,11 +256,11 @@ for i in `seq 1 $TotalGenerateLoops`; do
 
   if [ "$isSeedRandom" = TRUE ] ; then
     SeedNum=$((1 + RANDOM % 1000000)) 
-    echo "[NOTICE] Randomizing seed."
+    # echo "[NOTICE] Randomizing seed."
   fi
 
   header="python $scriptPath --seed $SeedNum --ddim_steps $StepsNum --scale $GuidanceScale --H $IHeight --W $IWidth --prompt \""
-  footer=", $themes\" --n_iter $iterations --negative_prompt \"$negative\" --n_samples 1"
+  footer=", $themes\" --n_iter $iterations --negative_prompt \"$negative\" --n_samples $batchSize"
 
 
   FromPromptStr=""
