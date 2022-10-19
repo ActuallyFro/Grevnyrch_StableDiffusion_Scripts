@@ -217,7 +217,7 @@ for i in `seq 1 $TotalGenerateLoops`; do
 
   if [ "$isSeedRandom" = TRUE ] ; then
     SeedNum=$((1 + RANDOM % 1000000)) 
-    echo "[NOTICE] Randomizing seed."
+    # echo "[NOTICE] Randomizing seed."
   fi
 
 
