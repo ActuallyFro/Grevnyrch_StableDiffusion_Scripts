@@ -19,6 +19,7 @@ areAllArtistsUsed=FALSE
 themesNeedConversions=FALSE
 isSeedRandom=FALSE
 isNPCSet=FALSE
+isBasicPCSet=FALSE
 
 scriptPath="optimizedSD/optimized_txt2img.py"
 
@@ -43,6 +44,11 @@ while [[ $# -gt 0 ]]; do
 
     -A | --artistPrecidence)
       isArtistPrecidence=TRUE
+      shift # past argument
+      ;;
+
+    -B | --Basic)
+      isBasicPCSet=TRUE
       shift # past argument
       ;;
 
@@ -118,7 +124,8 @@ while [[ $# -gt 0 ]]; do
       echo "GenerateFromPromptBat.sh [options]"
       echo "  -a | --artists <artists>                List of artists to use"
       echo "  -A | --artistPrecidence                 Use artist precidence before prompt ($isArtistPrecidence)"
-      echo "  -b | --batchSize <batchSize>            Batch size for generation ($batchSize)"      
+      echo "  -b | --batchSize <batchSize>            Batch size for generation ($batchSize)"
+      echo "  -B | --Basic                            Use basic characters"
       echo "  -g | --guidance|--scale <scale>         Guidance scale. ($GuidanceScale)"
       echo "  -G | --strength <strength>              Guidance strength. ($Strength)"
       echo "  -i | --iterations <iterations>          Number of iterations. ($iterations)"
@@ -193,7 +200,7 @@ npcs=(Academic cartographer judge scholar scribe Aristocrat duke marquess count 
 
 basicCharacters=(elf orc human half-elf half-orc tiefling halfling anthropomorphic_Dragon  gnome anthropomorphic_rabbit)
 
-characters=(Aarakocra Aasimar Bugbear Centaur Changeling Deep_Gnome anthropomorphic_Dragon Duergar Eladrin elf Fairy Firbolg gnome halfling Air_Genasi Earth_Genasi Fire_Genasi Water_Genasi Githyanki Githzerai Goblin Goliath half-elf half-orc anthropomorphic_rabbitHobgoblin human Kenku Kobol Lizardfolk Minotaur Orc Satyr Sea Elf Shadar-kai Shifter Tabaxi tiefling Tortle Triton Yuan-ti)
+characters=(Aarakocra Aasimar Bugbear Centaur Changeling Deep_Gnome anthropomorphic_Dragon Duergar Eladrin elf Fairy Firbolg gnome halfling Air_Genasi Earth_Genasi Fire_Genasi Water_Genasi Githyanki Githzerai Goblin Goliath half-elf half-orc anthropomorphic_rabbit Hobgoblin human Kenku Kobol Lizardfolk Minotaur Orc Satyr Sea Elf Shadar-kai Shifter Tabaxi tiefling Tortle Triton Yuan-ti)
 
 echo "===================="
 echo "[NOTICE] Prompt: \"<TBD>\""
@@ -213,6 +220,14 @@ if [[ "$isNPCSet" = "TRUE" ]] ; then
 else
   echo "[NOTICE] NPCs: ${npcs[@]}"
 fi
+echo ""
+if [[ "$isBasicPCSet" = "TRUE" ]] ; then
+  echo "[NOTICE] Basic Characters: ${basicCharacters[@]}"
+else
+  echo "[NOTICE] Characters: ${characters[@]}"
+fi
+
+
 echo "===================="
 
 UsedArtists=()
@@ -244,6 +259,8 @@ for i in `seq 1 $TotalGenerateLoops`; do
   randClass=${classes[$((RANDOM % ${#classes[@]}))]}
 
   randCharc=${characters[$((RANDOM % ${#characters[@]}))]}
+  randBasicCharc=${basicCharacters[$((RANDOM % ${#basicCharacters[@]}))]}
+
   randGend=${gend[$((RANDOM % ${#gend[@]}))]}
   randMood=${moods[$((RANDOM % ${#moods[@]}))]}
   randDescription=${descripts[$((RANDOM % ${#descripts[@]}))]}
@@ -251,6 +268,12 @@ for i in `seq 1 $TotalGenerateLoops`; do
   artist=${artists[$((RANDOM % ${#artists[@]}))]}
 
   PCStr=""
+
+  #overwrite randCharc if isBasicPCSet is TRUE
+  if [[ "$isBasicPCSet" = "TRUE" ]] ; then
+    randCharc=$randBasicCharc
+  fi
+
   if [ $isArtistPrecidence = "FALSE" ]; then
     if [ $isNPCSet = "TRUE" ]; then
       PCStr="$randNPC $randCharc $randGend, created by $artist $randMood $randDescription"
