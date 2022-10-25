@@ -10,14 +10,15 @@ Strength=0.5
 batchSize=3
 SeedNum=$((RANDOM % 100000))
 
-promptNeedsConversions=false
-negativePromptNeedsConversions=false
+promptNeedsConversions=FALSE
+negativePromptNeedsConversions=FALSE
 
-artistsNeedConversions=false
+artistsNeedConversions=FALSE
 isArtistPrecidence=FALSE
 areAllArtistsUsed=FALSE
-themesNeedConversions=false
+themesNeedConversions=FALSE
 isSeedRandom=FALSE
+isNPCSet=FALSE
 
 scriptPath="optimizedSD/optimized_txt2img.py"
 
@@ -76,6 +77,11 @@ while [[ $# -gt 0 ]]; do
       shift # past value
       ;;
 
+    -N | --NPC)
+      isNPCSet=TRUE
+      shift # past argument
+      ;;
+
     -n|--negative_prompt)
       negative="$2"
       negativePromptNeedsConversions=TRUE
@@ -117,6 +123,7 @@ while [[ $# -gt 0 ]]; do
       echo "  -G | --strength <strength>              Guidance strength. ($Strength)"
       echo "  -i | --iterations <iterations>          Number of iterations. ($iterations)"
       echo "  -p | --prompt \"<prompt>\"                Prompt to use. "
+      echo "  -N | --NPC                              Use NPC list over PC list"
       echo "  -n | --negative_prompt \"<negative>\"     Negative prompt to use."
       echo "  -R | --random                           Randomize the seed."
       echo "  -s | --steps <steps>                    Number of steps to take. ($StepsNum)"
@@ -141,7 +148,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [ "$artistsNeedConversions" = false ] ; then
+if [ "$artistsNeedConversions" = "FALSE" ] ; then
   #Artists v1.1.1
   artists=(eve_arnold mika_asai Tom_Bagshaw Banksy John_T._Biggers Elsa_Bleda Charlie_Bowater Aleski_Briclot David_Burdeny Saturno_Butto Mike_Campau Elizabeth_Catlett Nathan_Coley Andre_de_Dienes Roy_DeCarava Gariele_Dell\'otto Mandy_Disher Dave_Dorman Natalia_Drepina TJ_Drysdale Lori_Earley Micheal_Eastman Les_Edwards Bob_Eggleton Greg_Rutkowski Andreas_Rocha Magali_Villeneuve Natalie_Shau Anna_Dittmann Pino_Daeni Huang_Guangjian Allyssa_Monks Luis_Royo Daniel_F_Gerhartz Thomas_Kinkade Zdzislaw_Beksinski Atul_Kasbekar Dayanita_Singh Arjun_Mark Gautam_Rajadhyaksha)
 
@@ -149,17 +156,17 @@ else
   artists=(${artists//,/ })
 fi
 
-if [[ "$promptNeedsConversions" = "false" ]] ; then
+if [[ "$promptNeedsConversions" = "FALSE" ]] ; then
   echo "[WARNING] No prompt given. Using default."
   prompt="fantasy RPG, jungle, darkness, ((night)), stars, moon, stone altar-and-path looking down a menacing-creepy stone pit to the left, (((Chiaroscuro))), a geyser errupting in the distance, metal objects fused in thorns to the right, stone creature statues litered around the ground, blue-grey pulsating portal in the background"
 fi
 
-if [[ "$negativePromptNeedsConversions" = "false" ]] ; then
+if [[ "$negativePromptNeedsConversions" = "FALSE" ]] ; then
   echo "[WARNING] No negative prompt given. Using default."
   negative="(cartoon), ((anime)), cad, (disfigured), (bad art), (extra limbs), blurry, boring, sketch, (close up), lacklustre, repetitive, cropped, body out of frame, ((deformed)), (cross-eyed), (closed eyes), (bad anatomy), ugly, ((poorly drawn face)), child, baby"
 fi
 
-if [[ "$themesNeedConversions" = "false" ]] ; then
+if [[ "$themesNeedConversions" = "FALSE" ]] ; then
   echo "[WARNING] No themes given. Using default."
   themes="((full body)) portrait, fantasy RPG, (hyperdetailed) intricate, 8k, intense, sharp focus, two arms, two legs, (hyperdetailed) intricate, 8k, intense, sharp focus, hyperrealism, DLSR, Photograph"
 fi
@@ -180,7 +187,9 @@ descripts=(Well-dressed Elegant Good-looking Pretty Handsome Beautiful Gorgeous 
 gend=(male female male female androgynous)
 
 classes=(barbarian bard druid fighter rogue warlock wizard artificer)
-npc=()
+
+#Credit: https://negatherium.com/npc-generator/joblist.html
+npc=(Academic cartographer judge scholar scribe Aristocrat duke marquess count viscount baron greatchief warchief chief elder architect bricklayer carpenter mason plasterer roofer Clergy acolyte priest shaman alchemist armorer baker basket_weaver blacksmith bookbinder bowyer brewer butcher chandler cobbler cook glass_blower goldsmith instrument_maker inventor jeweler leatherworker locksmith painter potter rope_maker rug_maker sculptor ship_builder silversmith skinner tailor tanner toymaker weaponsmith weaver wheelwright woodcarver Criminal bandit burglar pickpocket pirate raider Entertainer acrobat bather jester minstrel prostitute storyteller Farmer crop_farmer gatherer herder Financier banker pawnbroker tax_collector fence_merchant Healer herbalist midwife Hosteler brothel_keeper innkeeper restaurantier tavern_keeper Laborer day_laborer miner porter Merchant beer_merchant bookseller caravanner dairy_seller fishmonger florist grain_merchant grocer haberdasher hay_merchant livestock_merchant military_outfitter miller peddler slaver spice_merchant tobacco_merchant used_clothier warehouser wine_merchant woodseller wool_merchant bounty_hunter city_guard private_guard mercenary soldier village_guard fisher hunter sailor trapper traveler Public_servant diplomat official politician town_crier Servant barber carriage_driver domestic_servant gardener groom guide inn_server launderer page rat_catcher restaurant_server slave tavern_server Unemployed beggar housespouse)
 
 characters=(elf orc human human half-elf half-orc tiefling halfling anthropomorphic_Dragon  gnome anthropomorphic_rabbit)
 
@@ -200,7 +209,7 @@ UsedArtists=()
 for i in `seq 1 $TotalGenerateLoops`; do
   artist=${artists[$((RANDOM % ${#artists[@]}))]}
   tempSeed=""
-  needRestoreSeed="false"
+  needRestoreSeed="FALSE"
 
   if [[ " ${UsedArtists[@]} " =~ " ${artist} " ]]; then
       tempSeed=$SeedNum
@@ -229,7 +238,7 @@ for i in `seq 1 $TotalGenerateLoops`; do
   artist=${artists[$((RANDOM % ${#artists[@]}))]}
 
   PCStr=""
-  if [ $isArtistPrecidence = FALSE ]; then
+  if [ $isArtistPrecidence = "FALSE" ]; then
     PCStr="$randClass $randCharc $randGend, created by $artist $randMood $randDescription"
   else
     PCStr="Created by $artist, $randClass $randCharc $randGend $randMood $randDescription"
