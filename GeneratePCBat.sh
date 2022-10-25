@@ -180,8 +180,9 @@ descripts=(Well-dressed Elegant Good-looking Pretty Handsome Beautiful Gorgeous 
 gend=(male female male female androgynous)
 
 classes=(barbarian bard druid fighter rogue warlock wizard artificer)
+npc=()
 
-characters=(elf orc human human half-elf half-orc tiefling halfling anthropomorphic_lokharic_Draconic  gnome anthropomorphic_rabbit)
+characters=(elf orc human human half-elf half-orc tiefling halfling anthropomorphic_Dragon  gnome anthropomorphic_rabbit)
 
 
 echo "===================="
