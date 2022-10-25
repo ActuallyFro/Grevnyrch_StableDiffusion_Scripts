@@ -198,9 +198,9 @@ classes=(barbarian bard druid fighter rogue warlock wizard artificer)
 #Credit: https://negatherium.com/npc-generator/joblist.html
 npcs=(Academic cartographer judge scholar scribe Aristocrat duke marquess count viscount baron greatchief warchief chief elder architect bricklayer carpenter mason plasterer roofer Clergy acolyte priest shaman alchemist armorer baker basket_weaver blacksmith bookbinder bowyer brewer butcher chandler cobbler cook glass_blower goldsmith instrument_maker inventor jeweler leatherworker locksmith painter potter rope_maker rug_maker sculptor ship_builder silversmith skinner tailor tanner toymaker weaponsmith weaver wheelwright woodcarver Criminal bandit burglar pickpocket pirate raider Entertainer acrobat bather jester minstrel prostitute storyteller Farmer crop_farmer gatherer herder Financier banker pawnbroker tax_collector fence_merchant Healer herbalist midwife Hosteler brothel_keeper innkeeper restaurantier tavern_keeper Laborer day_laborer miner porter Merchant beer_merchant bookseller caravanner dairy_seller fishmonger florist grain_merchant grocer haberdasher hay_merchant livestock_merchant military_outfitter miller peddler slaver spice_merchant tobacco_merchant used_clothier warehouser wine_merchant woodseller wool_merchant bounty_hunter city_guard private_guard mercenary soldier village_guard fisher hunter sailor trapper traveler Public_servant diplomat official politician town_crier Servant barber carriage_driver domestic_servant gardener groom guide inn_server launderer page rat_catcher restaurant_server slave tavern_server Unemployed beggar housespouse)
 
-basicCharacters=(elf orc human half-elf half-orc tiefling halfling anthropomorphic_Dragon  gnome anthropomorphic_rabbit)
+basicCharacters=(elf orc human half-elf half-orc tiefling halfling anthropomorphic-Dragon  gnome anthropomorphic-rabbit)
 
-characters=(Aarakocra Aasimar Bugbear Centaur Changeling Deep_Gnome anthropomorphic_Dragon Duergar Eladrin elf Fairy Firbolg gnome halfling Air_Genasi Earth_Genasi Fire_Genasi Water_Genasi Githyanki Githzerai Goblin Goliath half-elf half-orc anthropomorphic_rabbit Hobgoblin human Kenku Kobol Lizardfolk Minotaur Orc Satyr Sea Elf Shadar-kai Shifter Tabaxi tiefling Tortle Triton Yuan-ti)
+characters=(Aarakocra Aasimar Bugbear Centaur Changeling Deep-Gnome anthropomorphic-Dragon Duergar Eladrin elf Fairy Firbolg gnome halfling Air-Genasi Earth-Genasi Fire-Genasi Water-Genasi Githyanki Githzerai Goblin Goliath half-elf half-orc anthropomorphic-rabbit Hobgoblin human Kenku Kobol Lizardfolk Minotaur Orc Satyr Sea Elf Shadar-kai Shifter Tabaxi tiefling Tortle Triton Yuan-ti)
 
 echo "===================="
 echo "[NOTICE] Prompt: \"<TBD>\""
@@ -269,24 +269,18 @@ for i in `seq 1 $TotalGenerateLoops`; do
 
   PCStr=""
 
-  #overwrite randCharc if isBasicPCSet is TRUE
+  if [ $isNPCSet = "TRUE" ]; then
+    randClass=$randNPC
+  fi
+
   if [[ "$isBasicPCSet" = "TRUE" ]] ; then
     randCharc=$randBasicCharc
   fi
 
   if [ $isArtistPrecidence = "FALSE" ]; then
-    if [ $isNPCSet = "TRUE" ]; then
-      PCStr="$randNPC $randCharc $randGend, created by $artist $randMood $randDescription"
-    else
-      PCStr="$randClass $randCharc $randGend, created by $artist $randMood $randDescription"
-    fi
+    PCStr="$randClass $randCharc $randGend, created by $artist $randMood $randDescription"
   else
-    if [ $isNPCSet = "TRUE" ]; then
-      PCStr="Created by $artist, $randNPC $randCharc $randGend $randMood $randDescription"
-    else
-      PCStr="Created by $artist, $randClass $randCharc $randGend $randMood $randDescription"
-    fi
-    
+    PCStr="Created by $artist, $randClass $randCharc $randGend $randMood $randDescription"
   fi
   PCStr=${PCStr//_/ }
 
