@@ -81,3 +81,17 @@ for i in `seq 1 $TotalToGenerate`; do
 done
 
 
+#Summary of Prompt by Artist
+echo "=-----------------------="
+echo "Summary of Prompt by Artist:"
+echo ""
+for i in "${artists[@]}"; do
+  tempArtistName=${i//_/ }
+  count=$(cat $BATFile | grep "$tempArtistName" | wc -l)
+  echo "$i: $count"
+done
+echo "=-----------------------="
+
+echo ""
+echo "[FIN] see $BATFile for commands"
+
