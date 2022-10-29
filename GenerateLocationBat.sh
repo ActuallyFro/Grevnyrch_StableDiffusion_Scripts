@@ -149,11 +149,6 @@ else
   artists=(${artists//,/ })
 fi
 
-if [[ "$promptNeedsConversions" = "false" ]] ; then
-    echo "[WARNING] No prompt given. Using default."
-  prompt="fantasy RPG a group of adventurers standing at a busy city portcullis gate"
-fi
-
 if [[ "$negativePromptNeedsConversions" = "false" ]] ; then
   echo "[WARNING] No negative prompt given. Using default."
   negative="((anime)), (bad art), sketch, (close up), lacklustre, repetitive, cartoon, anime, boring, cropped, (mutation), ((HUD)), ((video game)), dull, vague, (blurry), distorted, framed"
@@ -239,7 +234,15 @@ for i in `seq 1 $TotalToGenerate`; do
   LocationStr=${LocationStr//_/ }
   
   header="python $scriptPath --seed $SeedNum --ddim_steps $StepsNum --scale $GuidanceScale --H $IHeight --W $IWidth --prompt \""
-  footer=", $themes\" --n_iter $iterations --negative_prompt \"$negative\" --n_samples $batchSize"
+
+  fantasyTag=""
+  if [ $((RANDOM % 2)) -eq 0 ]; then
+    fantasyTag="Fantasy RPG"
+  else
+    fantasyTag="Dark Fantasy RPG"
+  fi
+
+  footer=", (($fantasyTag)), $themes\" --n_iter $iterations --negative_prompt \"$negative\" --n_samples $batchSize"
 
   LocationPromptStr=""
   if [ $isArtistPrecidence = false ]; then
