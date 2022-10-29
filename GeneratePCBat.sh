@@ -175,7 +175,7 @@ fi
 
 if [[ "$themesNeedConversions" = "FALSE" ]] ; then
   echo "[WARNING] No themes given. Using default."
-  themes="((full body)) portrait, fantasy RPG, (hyperdetailed) intricate, 8k, intense, sharp focus, two arms, two legs, (hyperdetailed) intricate, 8k, intense, sharp focus, hyperrealism, DLSR, Photograph"
+  themes="((full body)) portrait, (hyperdetailed) intricate, 8k, intense, sharp focus, two arms, two legs, (hyperdetailed) intricate, 8k, intense, sharp focus, hyperrealism, DLSR, Photograph"
 fi
 
 #Artists v1.1.1
@@ -253,7 +253,15 @@ for i in `seq 1 $TotalGenerateLoops`; do
 
 
   header="python $scriptPath --seed $SeedNum --ddim_steps $StepsNum --scale $GuidanceScale --H $IHeight --W $IWidth --prompt \""
-  footer=", $themes\" --n_iter $iterations --negative_prompt \"$negative\" --n_samples $batchSize"
+
+  fantasyTag=""
+  if [ $((RANDOM % 2)) -eq 0 ]; then
+    fantasyTag="Fantasy RPG"
+  else
+    fantasyTag="Dark Fantasy RPG"
+  fi
+
+  footer=", (($fantasyTag)), $themes\" --n_iter $iterations --negative_prompt \"$negative\" --n_samples $batchSize"
 
 # for i in `seq 1 $TotalToGenerate`; do
   randNPC=${npcs[$((RANDOM % ${#npcs[@]}))]}
