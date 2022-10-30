@@ -151,12 +151,12 @@ fi
 
 if [[ "$negativePromptNeedsConversions" = "false" ]] ; then
   echo "[WARNING] No negative prompt given. Using default."
-  negative="((anime)), (bad art), sketch, (close up), lacklustre, repetitive, cartoon, anime, boring, cropped, (mutation), ((HUD)), ((video game)), dull, vague, (blurry), distorted, framed"
+  negative="anime, (bad art), sketch, (close up), lacklustre, repetitive, cartoon, boring, cropped, ((HUD)), ((video game)), dull, vague, (blurry), distorted, framed, modern"
 fi
 
 if [[ "$themesNeedConversions" = "false" ]] ; then
   echo "[WARNING] No themes given. Using default."
-  themes="(hyperdetailed) intricate, 8k, intense, sharp focus, hyperrealism, DLSR, Photograph"
+  themes="(hyperdetailed), intricate, 8k, intense, sharp focus, hyperrealism, DLSR, Photograph"
 fi
 
 echo "===================="
@@ -237,18 +237,18 @@ for i in `seq 1 $TotalToGenerate`; do
 
   fantasyTag=""
   if [ $((RANDOM % 2)) -eq 0 ]; then
-    fantasyTag="Fantasy RPG"
+    fantasyTag="Fantasy RPG,"
   else
-    fantasyTag="Dark Fantasy RPG"
+    fantasyTag="Dark Fantasy RPG,"
   fi
 
-  footer=", (($fantasyTag)), $themes\" --n_iter $iterations --negative_prompt \"$negative\" --n_samples $batchSize"
+  footer=", $themes\" --n_iter $iterations --negative_prompt \"$negative\" --n_samples $batchSize"
 
   LocationPromptStr=""
   if [ $isArtistPrecidence = false ]; then
-    LocationPromptStr="$LocationStr, created by $artist"
+    LocationPromptStr="$fantasyTag $LocationStr, created by $artist"
   else
-    LocationPromptStr="Created by $artist,$LocationStr"
+    LocationPromptStr="Created by $artist,$fantasyTag $LocationStr"
   fi
   LocationPromptStr=${LocationPromptStr//_/ }
 
