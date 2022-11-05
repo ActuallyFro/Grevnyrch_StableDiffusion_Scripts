@@ -203,6 +203,8 @@ basicCharacters=(elf orc human half-elf half-orc tiefling halfling anthropomorph
 characters=(anthropomorphic-bird angel Bugbear Centaur Changeling Deep-Gnome anthropomorphic-Dragon Duergar Eladrin elf Fairy Firbolg gnome halfling Air-djinn  Earth-djinn  Fire-djinn  Water-djinn  Githyanki_alien_looking Githzerai_alien_looking Goblin Goliath half-elf half-orc anthropomorphic-rabbit Hobgoblin human Kenku_raven Kobol Lizardfolk Minotaur Orc Satyr Sea Elf Shadar-kai Shifter anthropomorphic-large-cat tiefling Tortle Triton-Mermaid anthropomorphic-snake_gorgon 
 anthropomorphic-wolf anthropomorphic-wyvern anthropomorphic-ape anthropomorphic-bat anthropomorphic-bear anthropomorphic-boar anthropomorphic-crocodile anthropomorphic-dog anthropomorphic-eagle anthropomorphic-fox anthropomorphic-goat anthropomorphic-hawk anthropomorphic-hyena anthropomorphic-lion anthropomorphic-mouse anthropomorphic-owl anthropomorphic-panther anthropomorphic-raven anthropomorphic-snake anthropomorphic-tiger anthropomorphic-turtle anthropomorphic-wolf)
 
+clothing=(turban changshan hanfu Cheongsam Lederhosen Drindl sarafan Telnyashka Traje_de_flamenca)
+
 echo "===================="
 echo "[NOTICE] Prompt: \"<TBD>\""
 echo ""
@@ -276,6 +278,8 @@ for i in `seq 1 $TotalGenerateLoops`; do
 
   artist=${artists[$((RANDOM % ${#artists[@]}))]}
 
+  randClothing=${clothing[$((RANDOM % ${#clothing[@]}))]}
+
   PCStr=""
 
   if [ $isNPCSet = "TRUE" ]; then
@@ -284,6 +288,13 @@ for i in `seq 1 $TotalGenerateLoops`; do
 
   if [[ "$isBasicPCSet" = "TRUE" ]] ; then
     randCharc=$randBasicCharc
+  fi
+
+  # 1 in two chance of random clothing
+  if [ $((RANDOM % 2)) -eq 0 ]; then
+    randMood="$randMood $randClothing"
+  # else
+  #   randClothing=""
   fi
 
   if [ $isArtistPrecidence = "FALSE" ]; then
